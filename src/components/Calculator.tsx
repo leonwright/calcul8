@@ -3,7 +3,6 @@ import styled from "styled-components";
 import CalculatorKey from "./CalculatorKey";
 import { calculatorLayout } from "./calculatorLayout";
 
-// Generate styled component for the calculator
 const StyledCalculator = styled.div`
   .calculator {
     display: flex;
@@ -25,6 +24,7 @@ const StyledCalculator = styled.div`
     height: 50%;
     background-color: #fff;
     border: 1px solid #ccc;
+    overflow-x: scroll;
   }
   .calculator-display-value {
     display: flex;
@@ -65,7 +65,6 @@ const StyledCalculator = styled.div`
 const Calculator = () => {
   const [displayValue, setDisplayValue] = React.useState("0");
 
-  // when a number is pressed, update the display value
   const handleNumberClick = (number: string) => {
     if (displayValue === "0") {
       setDisplayValue(number);
@@ -74,7 +73,6 @@ const Calculator = () => {
     }
   };
 
-  // when an operator is pressed, update the display value
   const handleOperationClick = (operation: string) => {
     if (displayValue === "0") {
       setDisplayValue("0");
@@ -83,10 +81,21 @@ const Calculator = () => {
     }
   };
 
-  // calculate the result of the display value
   const calculateResult = () => {
     const result = eval(displayValue);
     setDisplayValue(result.toString());
+  };
+
+  const clearDisplay = () => {
+    setDisplayValue("0");
+  };
+
+  const handleBackspace = () => {
+    if (displayValue.length > 1) {
+      setDisplayValue(displayValue.slice(0, -1));
+    } else {
+      setDisplayValue("0");
+    }
   };
 
   return (
@@ -108,13 +117,20 @@ const Calculator = () => {
                 <CalculatorKey
                   key={keyIndex}
                   keyValue={key.keyValue}
-                  keyType={key.keyType as "number" | "operation" | "equals"}
+                  keyType={
+                    key.keyType as "number" | "operation" | "equals" | "clear"
+                  }
+                  displayValue={key.displayValue}
                   onClick={
                     key.keyType === "number"
                       ? handleNumberClick
                       : key.keyType === "operation"
                       ? handleOperationClick
-                      : calculateResult
+                      : key.keyType === "clear"
+                      ? clearDisplay
+                      : key.keyType === "equals"
+                      ? calculateResult
+                      : handleBackspace
                   }
                 />
               ))}

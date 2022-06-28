@@ -1,5 +1,22 @@
-// matrix for calculator layout
 export const calculatorLayout = [
+  [
+    {
+      keyType: "clear",
+      keyValue: "C",
+    },
+    {
+      keyType: "backspace",
+      keyValue: "⌫",
+    },
+    {
+      keyType: "number",
+      keyValue: "(",
+    },
+    {
+      keyType: "number",
+      keyValue: ")",
+    },
+  ],
   [
     {
       keyType: "number",
@@ -16,6 +33,7 @@ export const calculatorLayout = [
     {
       keyType: "operation",
       keyValue: "/",
+      displayValue: "÷",
     },
   ],
   [
@@ -34,6 +52,7 @@ export const calculatorLayout = [
     {
       keyType: "operation",
       keyValue: "*",
+      displayValue: "×",
     },
   ],
   [

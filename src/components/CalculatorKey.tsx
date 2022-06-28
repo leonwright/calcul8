@@ -4,11 +4,11 @@ import styled from "styled-components";
 // interface for the CalculatorKey component props
 interface CalculatorKeyProps {
   onClick: (number: string) => void;
-  keyType: "number" | "operation" | "equals" | "clear";
+  keyType: "number" | "operation" | "equals" | "clear" | "backspace";
   keyValue: string;
+  displayValue?: string;
 }
 
-// Generate styled component for calculator key (button)
 const StyledCalculatorKey = styled.div`
   display: flex;
   flex-direction: column;
@@ -39,7 +39,7 @@ const CalculatorKey = (props: CalculatorKeyProps) => {
         {...props}
         onClick={() => props.onClick(props.keyValue)}
       >
-        {props.keyValue}
+        {props.displayValue || props.keyValue}
       </StyledCalculatorKey>
     );
   } else if (props.keyType === "operation") {
@@ -50,7 +50,29 @@ const CalculatorKey = (props: CalculatorKeyProps) => {
         {...props}
         onClick={() => props.onClick(props.keyValue)}
       >
-        {props.keyValue}
+        {props.displayValue || props.keyValue}
+      </StyledCalculatorKey>
+    );
+  } else if (props.keyType === "clear") {
+    return (
+      <StyledCalculatorKey
+        id={`${props.keyType}`}
+        data-testid={`${props.keyType}`}
+        {...props}
+        onClick={() => props.onClick(props.keyValue)}
+      >
+        {props.displayValue || props.keyValue}
+      </StyledCalculatorKey>
+    );
+  } else if (props.keyType === "backspace") {
+    return (
+      <StyledCalculatorKey
+        id={`${props.keyType}`}
+        data-testid={`${props.keyType}`}
+        {...props}
+        onClick={() => props.onClick(props.keyValue)}
+      >
+        {props.displayValue || props.keyValue}
       </StyledCalculatorKey>
     );
   } else {

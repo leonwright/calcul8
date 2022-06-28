@@ -176,3 +176,20 @@ test("handleNumberClick", async () => {
   const display = await screen.findByTestId("display");
   expect(display).toHaveTextContent("7");
 });
+
+// test clearDisplay
+test("clearDisplay", async () => {
+  render(<Calculator />);
+  const number = screen.getByTestId("number-7");
+  act(() => {
+    number.click();
+  });
+
+  const clear = screen.getByTestId("clear");
+  act(() => {
+    clear.click();
+  });
+
+  const display = await screen.findByTestId("display");
+  expect(display).toHaveTextContent("0");
+});
