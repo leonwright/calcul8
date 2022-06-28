@@ -11,7 +11,7 @@ const StyledCalculator = styled.div`
     justify-content: center;
     width: 500px;
     height: 100%;
-    background-color: #f5f5f5;
+    background-color: #1795d4;
     border-radius: 5px;
     border: 1px solid #ccc;
   }
