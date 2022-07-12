@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import Calculator from "./Calculator";
 import { act } from "react-dom/test-utils";
 
@@ -192,4 +192,16 @@ test("clearDisplay", async () => {
 
   const display = await screen.findByTestId("display");
   expect(display).toHaveTextContent("0");
+});
+
+// test keydown event
+test("keydown event", async () => {
+  render(<Calculator />);
+  fireEvent.keyDown(window, { key: "7" });
+  fireEvent.keyDown(window, { key: "+" });
+  fireEvent.keyDown(window, { key: "7" });
+  fireEvent.keyDown(window, { key: "Enter" });
+
+  const display = await screen.findByTestId("display");
+  expect(display).toHaveTextContent("14");
 });

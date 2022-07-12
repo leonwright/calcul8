@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import CalculatorKey from "./CalculatorKey";
 import { calculatorLayout } from "./calculatorLayout";
@@ -65,38 +65,81 @@ const StyledCalculator = styled.div`
 const Calculator = () => {
   const [displayValue, setDisplayValue] = React.useState("0");
 
-  const handleNumberClick = (number: string) => {
-    if (displayValue === "0") {
-      setDisplayValue(number);
-    } else {
-      setDisplayValue(displayValue + number);
-    }
-  };
+  const handleNumberClick = useCallback(
+    (number: string) => {
+      if (displayValue === "0") {
+        setDisplayValue(number);
+      } else {
+        setDisplayValue(displayValue + number);
+      }
+    },
+    [displayValue]
+  );
 
-  const handleOperationClick = (operation: string) => {
-    if (displayValue === "0") {
-      setDisplayValue("0");
-    } else {
-      setDisplayValue(displayValue + operation);
-    }
-  };
+  const handleOperationClick = useCallback(
+    (operation: string) => {
+      if (displayValue === "0") {
+        setDisplayValue("0");
+      } else {
+        setDisplayValue(displayValue + operation);
+      }
+    },
+    [displayValue]
+  );
 
-  const calculateResult = () => {
+  const calculateResult = useCallback(() => {
     const result = eval(displayValue);
     setDisplayValue(result.toString());
-  };
+  }, [displayValue]);
 
   const clearDisplay = () => {
     setDisplayValue("0");
   };
 
-  const handleBackspace = () => {
+  const handleBackspace = useCallback(() => {
     if (displayValue.length > 1) {
       setDisplayValue(displayValue.slice(0, -1));
     } else {
       setDisplayValue("0");
     }
-  };
+  }, [displayValue]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // handle number keys
+      if (parseInt(e.key) >= 0 && parseInt(e.key) <= 9) {
+        handleNumberClick(e.key);
+      }
+
+      // handle backspace key
+      if (e.key === "Backspace") {
+        handleBackspace();
+      }
+
+      // handle operator keys
+      if (e.key === "*" || e.key === "/" || e.key === "+" || e.key === "-") {
+        handleOperationClick(e.key);
+      }
+
+      // handle enter as equals key
+      if (e.key === "Enter") {
+        calculateResult();
+      }
+    };
+    // add keydown event listener
+    window.addEventListener("keydown", handleKeyDown);
+
+    // remove keydown event listener
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [
+    calculateResult,
+    displayValue,
+    handleBackspace,
+    handleNumberClick,
+    handleOperationClick,
+  ]);
 
   return (
     <StyledCalculator>
