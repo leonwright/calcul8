@@ -205,3 +205,22 @@ test("keydown event", async () => {
   const display = await screen.findByTestId("display");
   expect(display).toHaveTextContent("14");
 });
+
+test("backspace event", async () => {
+  render(<Calculator />);
+  fireEvent.keyDown(window, { key: "7" });
+  fireEvent.keyDown(window, { key: "Backspace" });
+
+  const display = await screen.findByTestId("display");
+  expect(display).toHaveTextContent("0");
+});
+
+test("backspace event with multiple numbers", async () => {
+  render(<Calculator />);
+  fireEvent.keyDown(window, { key: "7" });
+  fireEvent.keyDown(window, { key: "7" });
+  fireEvent.keyDown(window, { key: "Backspace" });
+
+  const display = await screen.findByTestId("display");
+  expect(display).toHaveTextContent("7");
+});
